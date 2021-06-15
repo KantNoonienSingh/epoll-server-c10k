@@ -8,21 +8,16 @@
 
 namespace {
 
-    static std::atomic<int> count(0);
-
     /*! @class client packet handler
      */
     class echo : public comm::client_pool<echo> {
     public:
 
-
         inline echo(const std::size_t nworkers, const std::size_t size) : client_pool(nworkers, size) {  }
 
         inline void on_input(int sfd, char* data, int datalen) {
             // Just echo the message back
-            if (comm::endpoint_write(sfd, data, datalen) == datalen) {
-                count.fetch_add(1);
-            }
+            comm::endpoint_write(sfd, data, datalen);
         }
     };
 }
