@@ -5,10 +5,8 @@
 #define _COMM_ENDPOINT_HPP
 
 #include <fcntl.h>
-#include <unistd.h>
 
 #include <arpa/inet.h>
-#include <netinet/in.h>
 
 namespace comm {
 

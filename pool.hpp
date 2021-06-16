@@ -9,7 +9,6 @@
 #include <vector>
 
 #include <sys/ioctl.h>
-#include <sys/socket.h>
 
 #include "atomic_queue.hpp"
 #include "epoll.hpp"

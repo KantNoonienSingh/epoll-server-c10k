@@ -4,7 +4,6 @@
 #ifndef _COMM_MEM_HPP
 #define _COMM_MEM_HPP
 
-#include <cstring>
 #include <stdexcept>
 
 #include <unistd.h>
