@@ -4,16 +4,17 @@
 #include <cstring>
 #include <memory>
 
-#include "pool.hpp"
+#include "server.hpp"
 
 namespace {
 
     /*! @class client packet handler
      */
-    class echo : public comm::client_pool<echo> {
+    class echo : public comm::server_callback_handler<echo> {
     public:
 
-        inline echo(const std::size_t nworkers, const std::size_t size) : client_pool(nworkers, size) {  }
+        inline echo(const std::size_t nworkers,
+                    const std::size_t size) : comm::server_callback_handler<echo>(nworkers, size) {  }
 
         inline void on_input(int sfd, char* data, int datalen) {
             // Just echo the message back
@@ -58,7 +59,7 @@ int main()
         return print_server_socket_error(port), 1;
     }
 
-    typedef comm::server_pool<echo> server;
+    typedef comm::server<echo> server;
 
     std::shared_ptr<server> sv;
 
