@@ -15,7 +15,7 @@ Below is example of an echo server (see also test/main.cpp):
 #include "server.hpp"
 
 // The client packet handler
-class echo : public comm::client_callback_handler<echo>
+class echo : public comm::client_callback_handler&lt;echo&gt;
 {
     ...
 };
@@ -26,12 +26,12 @@ std::size_t j = 10;  // Maximum # of worker threads
 std::size_t n = 2e5; // Maximum # of TCP connections at any one time. Any connection attempts past this threshold will be dropped.
 
 // Initialize the server
-typedef server<echo> server;
-std::shared_ptr<server> sv;
+typedef server&lt;echo&gt; server;
+std::shared_ptr&lt;server&gt; sv;
 
 try
 {
-    sv = std::make_shared<server>(j, n);
+    sv = std::make_shared&lt;server&gt;(j, n);
 }
 
 catch (comm_exception& e) 
@@ -83,31 +83,24 @@ The server is edge triggered, meaning that it's the user's responsibility to pro
 
 <pre>
 // Example echo client handler implementation
-class echo : public comm::client_pool<echo> 
+class echo : public comm::client_pool&lt;echo &gt;
 {
     ...
 
 public:
 
-    void on_input(comm::client* cl) 
+    void on_input(int clientSock, char* data, int dataLen) 
     {
-        // Client socket
-        int clientSock = comm::get_sock(cl);
-
-        // Received message
-        char* data = comm::get_data(cl);
-        int dataLen = comm::get_data_len(cl);
-
         // Echo message back to the client
         comm::endpoint_write(clientSock, data, dataLen);
     }
 
-    void on_oob(comm::client* cl, char oobFlag) 
+    void on_oob(int clientSock, char oobFlag) 
     {
         ...
     }
 
-    void on_write_ready(comm::client* cl) 
+    void on_write_ready(int clientSock) 
     {
         ...
     }
