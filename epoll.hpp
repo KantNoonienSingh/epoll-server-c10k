@@ -183,7 +183,8 @@ namespace comm {
 
                     // Daisy-chained shutdown
                     // This routine will shut down the next thread to call epoll_wait()
-                    if (detail::ctl(epfd_, EPOLL_CTL_MOD, selfpipe_[1], EPOLLIN | EPOLLET | EPOLLONESHOT, nullptr) == -1) {
+                    if (detail::ctl(epfd_, EPOLL_CTL_MOD, selfpipe_[1], EPOLLIN | EPOLLET | EPOLLONESHOT,
+                                    nullptr) == -1) {
                         throw std::runtime_error("failed to create epoll descriptor");
                     }
 
