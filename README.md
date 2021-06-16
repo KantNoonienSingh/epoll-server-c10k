@@ -83,7 +83,7 @@ The server is edge triggered, meaning that it's the user's responsibility to pro
 
 <pre>
 // Example echo client handler implementation
-class echo : public comm::client_pool&lt;echo &gt;
+class echo : public comm::client_packet_handler&lt;echo&gt;
 {
     ...
 
