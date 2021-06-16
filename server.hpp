@@ -12,7 +12,7 @@ namespace comm {
     using server = comm::server_pool<T>;
 
     template <typename T>
-    using server_callback_handler = comm::client_pool<T>;
+    using client_callback_handler = comm::client_pool<T>;
 }
 
 #endif

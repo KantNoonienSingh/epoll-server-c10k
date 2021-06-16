@@ -10,11 +10,11 @@ namespace {
 
     /*! @class client packet handler
      */
-    class echo : public comm::server_callback_handler<echo> {
+    class echo : public comm::client_callback_handler<echo> {
     public:
 
         inline echo(const std::size_t nworkers,
-                    const std::size_t size) : comm::server_callback_handler<echo>(nworkers, size) {  }
+                    const std::size_t size) : comm::client_callback_handler<echo>(nworkers, size) {  }
 
         inline void on_input(int sfd, char* data, int datalen) {
             // Just echo the message back
