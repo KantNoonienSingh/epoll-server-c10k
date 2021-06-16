@@ -2,7 +2,7 @@
 A scalable server written for the C10k problem
 --------------------------------------------------------------------------------
 
-This is a light-weight, header-only, epoll-based server library designed to achieve high TCP connection counts. The library uses a lock-free concurrency model for high performance thread synchronization. Worker threads are client-agnostic and have access to every client, ensuring that there are no processing bottlenecks.
+This is a light-weight, header-only, epoll-based server library designed to achieve high TCP connection counts. The library uses a lock-free concurrency model for high performance thread synchronization. Worker threads are client-agnostic and have access to every client, ensuring that CPU resources aren't wasted on idling.
 
 The is very much a work in progress and there is still more work to do. Please feel free to leave comments or suggestions.
 
