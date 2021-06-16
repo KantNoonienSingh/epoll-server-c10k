@@ -41,14 +41,14 @@ catch (comm_exception& e)
 
 // The server must be bound to a port
 int port60008 = 60008;
-if (!sv->bind(port60007)) 
+if (!sv->bind(port60008)) 
 {
    // Handle error...
 }
 
 // The server can be bound to any number of additional ports
 int port70011 = 700011;
-if (!sv->bind(port70009))
+if (!sv->bind(port70011))
 {
     // Handle error...
 }
