@@ -2,7 +2,7 @@
 A scalable server written for the C10k problem
 --------------------------------------------------------------------------------
 
-This is a light-weight, header-only, epoll-based server library designed to achieve high TCP connection counts. The library uses a lock-free concurrency model for high performance thread synchronization. Worker threads are client-agnostic and have access to every client, ensuring that CPU resources aren't wasted on idling.
+This is a light-weight, header-only, epoll-based server library designed to achieve high TCP connection counts. Written in modern C++, the library uses a lock-free concurrency model for high performance thread synchronization. Worker threads are client-agnostic and have access to every client, ensuring that CPU resources aren't wasted on idling.
 
 The is very much a work in progress and there is still more work to do. Please feel free to leave comments or suggestions.
 
@@ -12,18 +12,21 @@ Usage
 Below is example of an echo server (see also test/main.cpp):
 
 <pre>
-// The packet handler
-class echo : public comm::client_pool 
+#include "server.hpp"
+
+// The client packet handler
+class echo : public comm::client_callback_handler<echo>
 {
     ...
 };
 
-typedef comm::server_pool<echo> server;
+...
 
 std::size_t j = 10;  // Maximum # of worker threads
 std::size_t n = 2e5; // Maximum # of TCP connections at any one time. Any connection attempts past this threshold will be dropped.
 
 // Initialize the server
+typedef server<echo> server;
 std::shared_ptr<server> sv;
 
 try
