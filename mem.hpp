@@ -76,8 +76,7 @@ namespace comm {
     }
 
     //! Allocates a double-page memory map
-    //! @param[in/out] sizeHint    memory map size will be *at least* this big,
-    //!                            will be expanded up to page size border
+    //! @param[in/out] sizeHint    memory map size will be *at least* this big, will be expanded up to page size border
     //! @return                    pointer to allocated memory map
     template <typename T>
     inline T* gen_memmap(std::size_t* const sizeHint)
