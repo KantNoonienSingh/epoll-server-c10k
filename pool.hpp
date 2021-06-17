@@ -265,7 +265,8 @@ namespace comm {
                 break;
             }
 
-            default: {
+            default:
+            {
                 // Have error, close the socket
                 if ((flags & EPOLLERR) == EPOLLERR) {
                     unuse(client);
@@ -449,14 +450,26 @@ namespace comm {
     /*! Called on epoll event to handle connection requests
      */
     template <typename T>
-    void server_pool<T>::process(const int sfd, const int)
+    void server_pool<T>::process(const int sfd, const int flags)
     {
-        int cfd;
-        while ((cfd = endpoint_accept(sfd)) != -1)
+        switch (flags)
         {
-            if (endpoint_unblock(cfd) != 0
-                || !clients_.add_client(cfd)) {
-                endpoint_close(cfd);
+            case EPOLLERR:
+            {
+                endpoint_close(sfd);
+                break;
+            }
+
+            default:
+            {
+                int cfd;
+                while ((cfd = endpoint_accept(sfd)) != -1)
+                {
+                    if (endpoint_unblock(cfd) != 0
+                        || !clients_.add_client(cfd)) {
+                        endpoint_close(cfd);
+                    }
+                }
             }
         }
     }
