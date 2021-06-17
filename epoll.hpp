@@ -181,8 +181,9 @@ namespace comm {
                     char ch;
                     endpoint_read(selfpipe_[1], &ch, sizeof(ch));
 
-                    // Daisy-chained shutdown
-                    // This routine will shut down the next thread to call epoll_wait()
+                    // Daisy-chained shutdown using the self-pipe trick.
+                    // Before escaping the current thread, this block will write to the self-pipe. The next
+                    // thread to call epoll_wait() will read the pipe and follow the same daisy-chained exit procedure.
                     if (detail::ctl(epfd_, EPOLL_CTL_MOD, selfpipe_[1], EPOLLIN | EPOLLET | EPOLLONESHOT,
                                     nullptr) == -1) {
                         throw std::runtime_error("failed to create epoll descriptor");
