@@ -193,10 +193,11 @@ namespace comm {
     template <typename Tderiv>
     void client_pool<Tderiv>::process(client* const client, int flags)
     {
-        static const int rem = ~(EPOLLERR | EPOLLHUP);
-
-        switch (flags & rem)
+        switch (flags)
         {
+            case EPOLLHUP:
+            case EPOLLHUP | EPOLLOUT:
+
             case EPOLLRDHUP:
             case EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
             {
@@ -205,6 +206,9 @@ namespace comm {
             }
 
             case EPOLLIN:
+            case EPOLLIN | EPOLLHUP:
+            case EPOLLIN | EPOLLHUP | EPOLLOUT: // > ignore EPOLLOUT
+
             case EPOLLIN | EPOLLRDHUP:
             case EPOLLIN | EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
             {
@@ -213,6 +217,9 @@ namespace comm {
             }
 
             case EPOLLPRI:
+            case EPOLLPRI | EPOLLHUP:
+            case EPOLLPRI | EPOLLHUP | EPOLLOUT: // > ignore EPOLLOUT
+
             case EPOLLPRI | EPOLLRDHUP:
             case EPOLLPRI | EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
             {
@@ -221,6 +228,9 @@ namespace comm {
             }
 
             case EPOLLIN | EPOLLPRI:
+            case EPOLLIN | EPOLLPRI | EPOLLHUP:
+            case EPOLLIN | EPOLLPRI | EPOLLHUP | EPOLLOUT: // > ignore EPOLLOUT
+
             case EPOLLIN | EPOLLPRI | EPOLLRDHUP:
             case EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
             {
@@ -253,6 +263,13 @@ namespace comm {
                 handle_epollpri(client);
                 handle_epollout(client);
                 break;
+            }
+
+            default: {
+                // Have error, close the socket
+                if ((flags & EPOLLERR) == EPOLLERR) {
+                    unuse(client);
+                }
             }
         }
     }
