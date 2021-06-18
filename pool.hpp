@@ -134,8 +134,8 @@ namespace comm {
         // Applied to critical section when starting and stopping the running instance
         std::mutex lock_;
 
-        std::vector<std::thread> threads_;
         std::size_t nworkers_;
+        std::vector<std::thread> threads_;
 
         // Allocated slab of memory, maximum client size
         client* mem_;
