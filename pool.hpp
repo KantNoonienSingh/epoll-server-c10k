@@ -132,19 +132,19 @@ namespace comm {
         friend epoll<client_pool<Tderiv> >;
 
         // Applied to critical section when starting and stopping the running instance
-        std::mutex               lock_;
+        std::mutex lock_;
 
         std::vector<std::thread> threads_;
-        std::size_t              nworkers_;
+        std::size_t nworkers_;
 
         // Allocated slab of memory, maximum client size
-        client*                  mem_;
+        client* mem_;
 
-        std::size_t              clientcap_;
+        std::size_t clientcap_;
         std::atomic<std::size_t> clientsize_;
 
         // Pointers to currently unused clients
-        atomic_queue<client*>    unused_;
+        atomic_queue<client*> unused_;
 
         /*! Called on epoll event, casts epoll data value to correct type before passing it to process()
          */
