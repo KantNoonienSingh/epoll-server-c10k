@@ -70,11 +70,7 @@ namespace comm {
             if (cap_ <= t)
             {
                 while (tail_.load() > t) {  }
-
-                int r = t - cap_;
-                if (tail_.compare_exchange_strong(t, t - cap_, std::memory_order_relaxed)) {
-                    printf("CAP -> %d, TAIL -> %d -> %d\n", cap_, t, r);
-                }
+                tail_.compare_exchange_strong(t, t - cap_, std::memory_order_relaxed);
             }
         }
 
@@ -89,11 +85,7 @@ namespace comm {
             if (cap_ <= h)
             {
                 while (head_.load() > h) {  }
-
-                int r = h - cap_;
-                if (head_.compare_exchange_strong(h, h - cap_, std::memory_order_relaxed)) {
-                    printf("CAP -> %d, HEAD -> %d -> %d\n", cap_, h, r);
-                }
+                head_.compare_exchange_strong(h, h - cap_, std::memory_order_relaxed);
             }
 
             return data;
