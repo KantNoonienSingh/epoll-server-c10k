@@ -1,4 +1,4 @@
-/* network.hpp -- v1.0 -- contains socket read, write and fcntl functions
+/* endpoint.hpp -- v1.0 -- contains socket read, write and fcntl functions
    Author: Sam Y. 2021 */
 
 #ifndef _COMM_ENDPOINT_HPP
