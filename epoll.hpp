@@ -49,7 +49,7 @@ namespace comm {
         }
     }
 
-    //! @class epollen
+    //! @class epoll
     /*! encapsulates an epoll instance
      */
     template <typename Tderiv>
