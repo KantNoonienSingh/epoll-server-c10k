@@ -1,5 +1,5 @@
-/* main.cpp -- v1.0 -- an echo server application
-   Author: Sam Y. 2021 */
+/* echo.cpp -- v1.0 -- an echo server application
+   Author: Sam Y. 2021-22 */
 
 #include <cstring>
 #include <memory>

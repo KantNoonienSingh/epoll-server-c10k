@@ -19,7 +19,7 @@ namespace comm {
 
         //! ctor.
         //!
-        atomic_queue() : buff_(nullptr), cap_(0) {
+        atomic_queue() : buff_(nullptr), capacity_(0) {
 
             ok_.store(false);
             head_.store(0);
@@ -27,12 +27,12 @@ namespace comm {
         }
 
         //! ctor.
-        //! @param capHint    queue will have *at least* this capacity,
-        //!                   will be expanded up to page size border
-        explicit atomic_queue(std::size_t capHint) {
+        //! @param capacityHint    queue will have *at least* this capacity,
+        //!                        will be expanded up to page size border
+        explicit atomic_queue(std::size_t capacityHint) {
 
-            buff_ = static_cast<T*>(gen_memmap<T>(&capHint));
-            cap_ = capHint;
+            buff_ = static_cast<T*>(gen_memmap<T>(&capacityHint));
+            capacity_ = capacityHint;
             ok_.store(true);
             head_.store(0);
             tail_.store(0);
@@ -41,7 +41,7 @@ namespace comm {
         /*! Total capacity
          */
         std::size_t capacity() const {
-            return cap_;
+            return capacity_;
         }
 
         T* data() {
@@ -55,7 +55,7 @@ namespace comm {
         void destroy() {
 
             if (ok_.exchange(false)) {
-                del_memmap<T>(buff_, cap_);
+                del_memmap<T>(buff_, capacity_);
             }
         }
 
@@ -67,10 +67,10 @@ namespace comm {
             buff_[t++] = data;
 
             // Maybe roll over
-            if (cap_ <= t)
+            if (capacity_ <= t)
             {
                 while (tail_.load() > t) {  }
-                tail_.compare_exchange_strong(t, t - cap_, std::memory_order_relaxed);
+                tail_.compare_exchange_strong(t, t - capacity_, std::memory_order_relaxed);
             }
         }
 
@@ -82,10 +82,10 @@ namespace comm {
             const T data = buff_[h++];
 
             // Maybe roll over
-            if (cap_ <= h)
+            if (capacity_ <= h)
             {
                 while (head_.load() > h) {  }
-                head_.compare_exchange_strong(h, h - cap_, std::memory_order_relaxed);
+                head_.compare_exchange_strong(h, h - capacity_, std::memory_order_relaxed);
             }
 
             return data;
@@ -93,10 +93,14 @@ namespace comm {
 
     private:
 
+        // Buffer
         T* buff_;
-        int cap_;
+        // Buffer capacity
+        int capacity_;
 
+        // Destructor guard
         std::atomic<bool> ok_;
+        // Circular queue pointer head and tail
         std::atomic<int> head_, tail_;
     };
 }

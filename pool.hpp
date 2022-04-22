@@ -1,5 +1,5 @@
 /* pool.hpp -- v1.0 -- client and server event handlers
-   Author: Sam Y. 2021 */
+   Author: Sam Y. 2021-22 */
 
 #ifndef _COMM_POOL_HPP
 #define _COMM_POOL_HPP
@@ -19,7 +19,7 @@ namespace comm {
     class server_pool_base {  };
 
     //! @class client_pool
-    /*! Encapsulates event handling for multiple clients
+    /*! encapsulates event handling for multiple clients
      */
     template <typename Tderiv>
     class client_pool : public client_pool_base,
@@ -199,7 +199,7 @@ namespace comm {
             case EPOLLHUP | EPOLLOUT:
 
             case EPOLLRDHUP:
-            case EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLRDHUP | EPOLLOUT: // ignore EPOLLOUT
             {
                 unuse(client);
                 break;
@@ -207,34 +207,34 @@ namespace comm {
 
             case EPOLLIN:
             case EPOLLIN | EPOLLHUP:
-            case EPOLLIN | EPOLLHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLIN | EPOLLHUP | EPOLLOUT: // ignore EPOLLOUT
 
             case EPOLLIN | EPOLLRDHUP:
-            case EPOLLIN | EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLIN | EPOLLRDHUP | EPOLLOUT: // ignore EPOLLOUT
             {
-                handle_epollin(client); // > Also processes hangup (on 0-byte read)
+                handle_epollin(client); // Also processes hangup (on 0-byte read)
                 break;
             }
 
             case EPOLLPRI:
             case EPOLLPRI | EPOLLHUP:
-            case EPOLLPRI | EPOLLHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLPRI | EPOLLHUP | EPOLLOUT: // ignore EPOLLOUT
 
             case EPOLLPRI | EPOLLRDHUP:
-            case EPOLLPRI | EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLPRI | EPOLLRDHUP | EPOLLOUT: // ignore EPOLLOUT
             {
-                handle_epollpri(client); // > Also process hangup (on 0-byte read)
+                handle_epollpri(client); // Also process hangup (on 0-byte read)
                 break;
             }
 
             case EPOLLIN | EPOLLPRI:
             case EPOLLIN | EPOLLPRI | EPOLLHUP:
-            case EPOLLIN | EPOLLPRI | EPOLLHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLIN | EPOLLPRI | EPOLLHUP | EPOLLOUT: // ignore EPOLLOUT
 
             case EPOLLIN | EPOLLPRI | EPOLLRDHUP:
-            case EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLOUT: // > ignore EPOLLOUT
+            case EPOLLIN | EPOLLPRI | EPOLLRDHUP | EPOLLOUT: // ignore EPOLLOUT
             {
-                handle_epollpri(client); // > Also processes hangup (on 0-byte read)
+                handle_epollpri(client); // Also processes hangup (on 0-byte read)
                 break;
             }
 
@@ -328,7 +328,7 @@ namespace comm {
             int mark;
             if (::ioctl(cl->sfd, SIOCATMARK, &mark) == -1)
             {
-                unuse(cl); // > Have actual error - done with client
+                unuse(cl); // Have actual error - done with client
                 break;
             }
 
@@ -342,7 +342,7 @@ namespace comm {
 
                     else
                     {
-                        unuse(cl); // > Have actual error - done with client
+                        unuse(cl); // Have actual error - done with client
                         break;
                     }
                 }
@@ -354,7 +354,7 @@ namespace comm {
                 case -1:
                 {
                     if (errno != EAGAIN)
-                        unuse(cl); // > Have actual error - done with client
+                        unuse(cl); // Have actual error - done with client
                     else
                         epoll<client_pool>::rearm(cl);
                     return;
@@ -362,7 +362,7 @@ namespace comm {
 
                 case 0:
                 {
-                    unuse(cl); // > Disconnection - done with client
+                    unuse(cl); // Disconnection - done with client
                     return;
                 }
 
@@ -377,7 +377,7 @@ namespace comm {
     }
 
     //! @class server_pool
-    /*! Encapsulates event handling for multiple server sockets and their clients
+    /*! encapsulates event handling for multiple server sockets and their clients
      */
     template <typename T>
     class server_pool : public server_pool_base, public epoll<server_pool<T> > {
